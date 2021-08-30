@@ -1,0 +1,25 @@
+apiVersion: app.openshift.io/v1
+kind: "DeploymentConfig"
+metadata:
+    name: "worker-deployment"
+spec:
+    template:
+        metadata:
+            labels:
+                app : "worker"
+        spec:
+            containers:
+                - name : "worker"
+                  image: "image-registry.openshift-image-registry.svc:5000/utopios-dev/worker-image"
+                  imagePullPolicy: "IfNotPresent"
+    replicas: 3
+    triggers:
+        - type: ConfigChange
+        - type: "ImageChange"
+          imageChangeParams:
+            automatic: true
+            containerNames:
+                - "worker"
+            from:
+                kind: "ImageStreamTag"
+                name: "worker-image:latest"

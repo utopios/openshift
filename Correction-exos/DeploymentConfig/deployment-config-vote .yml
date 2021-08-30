@@ -1,0 +1,28 @@
+apiVersion: app.openshift.io/v1
+kind: "DeploymentConfig"
+metadata:
+    name: "vote-deployment"
+spec:
+    template:
+        metadata:
+            labels:
+                app : "vote"
+        spec:
+            containers:
+                - name : "vote"
+                  image: "image-registry.openshift-image-registry.svc:5000/utopios-dev/vote-image"
+                  imagePullPolicy: "IfNotPresent"
+                  ports:
+                    - containerPort: 80
+                      protocol: "TCP"
+    replicas: 3
+    triggers:
+        - type: ConfigChange
+        - type: "ImageChange"
+          imageChangeParams:
+            automatic: true
+            containerNames:
+                - "vote"
+            from:
+                kind: "ImageStreamTag"
+                name: "vote-image:latest"

@@ -1,0 +1,28 @@
+apiVersion: app.openshift.io/v1
+kind: "DeploymentConfig"
+metadata:
+    name: "result-deployment"
+spec:
+    template:
+        metadata:
+            labels:
+                app : "result"
+        spec:
+            containers:
+                - name : "result"
+                  image: "image-registry.openshift-image-registry.svc:5000/utopios-dev/result-image"
+                  imagePullPolicy: "IfNotPresent"
+                  ports:
+                    - containerPort: 4000
+                      protocol: "TCP"
+    replicas: 3
+    triggers:
+        - type: ConfigChange
+        - type: "ImageChange"
+          imageChangeParams:
+            automatic: true
+            containerNames:
+                - "result"
+            from:
+                kind: "ImageStreamTag"
+                name: "result-image:latest"
