@@ -14,7 +14,7 @@ spec:
         containers:
         - name: postgres
           image: postgres:9.4
-          pullSecret: "docker"
+          pullSecret: "dockersecret"
           env:
             - name: POSTGRES_USER
               value: "postgres"
