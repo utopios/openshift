@@ -18,3 +18,16 @@ spec:
         to:
             kind: ImageStreamTag
             name: result-image:latest
+    triggers:
+        # - type: "GitHub"
+        # github:
+        #     secretReference:
+        #         name: "mysecret"
+#Adresse pour envoyer une requête vers openshift pour démarrer un nouveau build est sous la forme :
+#https://console-openshift-console.apps.sandbox.x8i5.p1.openshiftapps.com/oapi/v1/namespaces/utopios-dev/buildconfigs/result-build/webhooks/fd9d002b1e9d930c/github  
+        # - type: ImageChange
+        # imageChange:
+        #     from:
+        #         kind: "DockerImage"
+        #         name: "node"
+        - type: ConfigChange     
