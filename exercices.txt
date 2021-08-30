@@ -5,3 +5,4 @@ En utlisant le projet vote:
 4-  Création de services pour communiquer entre les deployments et avec l'exeterieur
     2 Service NodePort
     2 Service clusterIP
+5- Créer un template pour les parties du projets vote et result
