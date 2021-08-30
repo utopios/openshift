@@ -11,19 +11,25 @@ spec:
       labels:
         app: postgres
     spec:
-      containers:
-      - name: postgres
-        image: postgres:9.4
-        pullSecret: "docker"
-        env:
-          - name: POSTGRES_USER
-            value: "postgres"
-          - name: POSTGRES_PASSWORD
-            value: "postgres"
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "100m"
-        ports:
-        - containerPort: 5432
+        containers:
+        - name: postgres
+          image: postgres:9.4
+          pullSecret: "docker"
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+          resources:
+            limits:
+                memory: "128Mi"
+                cpu: "100m"
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: mon-volume
+        volumes:
+            - name: mon-volume
+
 
