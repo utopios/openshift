@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Template
+metadata:
+    name: firstTemplate
+objects:
+    - apiVersion: build.openshift.io/v1
+      kind: BuildConfig
+      metadata:
+        name: "${NAME}-build"
+        labels:
+            build: "${NAME}-build"
+      spec:
+        source:
+            type: Git
+            git:
+                uri: ${URI_REPOS}
+            contextDir: ${NAME}
+        strategy:
+            type: Docker
+            dockerStrategy:
+                dockerfilePath: Dockerfile
+            pullSecret: "docker"
+        output:
+            to:
+                kind: ImageStreamTag
+                name: "${NAME}-image:latest"
+parameters:
+    - name: NAME
+      value: toto
+    - name: URI_REPOS
+      value: 'https://github.com/ihabAbadi/TP'
