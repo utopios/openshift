@@ -1,8 +1,12 @@
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
-    name: firstTemplate
+    name: second-template
 objects:
+    - apiVersion: image.openshift.io/v1
+      kind: ImageStreamTag
+      metadata:
+        name: "${NAME}-image:latest"
     - apiVersion: build.openshift.io/v1
       kind: BuildConfig
       metadata:
@@ -24,8 +28,10 @@ objects:
             to:
                 kind: ImageStreamTag
                 name: "${NAME}-image:latest"
+        triggers:
+            - type: ConfigChange
 parameters:
     - name: NAME
-      value: toto
+      value: tata
     - name: URI_REPOS
       value: 'https://github.com/ihabAbadi/TP'
