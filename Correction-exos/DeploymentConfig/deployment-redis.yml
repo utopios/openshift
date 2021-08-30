@@ -14,7 +14,7 @@ spec:
       containers:
       - name: redis
         image: redis:5.0-alpine3.10
-        pullSecret: "dockersecret"
+        pullSecret: "docker"
         resources:
           limits:
             memory: "128Mi"

@@ -1,0 +1,99 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+    name: tp-template
+objects:
+    # Création d'image
+    - apiVersion: image.openshift.io/v1
+      kind: ImageStreamTag
+      metadata:
+        name: "${NAME}-image:latest"
+    # Créatopn du build config
+    - apiVersion: build.openshift.io/v1
+      kind: BuildConfig
+      metadata:
+        name: "${NAME}-build"
+        labels:
+            build: "${NAME}-build"
+      spec:
+        source:
+            type: Git
+            git:
+                uri: ${URI_REPOS}
+            contextDir: ${REPOS_DIR}
+        strategy:
+            type: Docker
+            dockerStrategy:
+                dockerfilePath: Dockerfile
+            pullSecret: "docker"
+        output:
+            to:
+                kind: ImageStreamTag
+                name: "${NAME}-image:latest"
+        triggers:
+            - type: ConfigChange
+            - type: "GitHub"
+                github:
+                    secretReference:
+                        name: "mysecret"
+    # création deployment config
+    - apiVersion: apps.openshift.io/v1
+      kind: "DeploymentConfig"
+      metadata:
+        name: "${NAME}-deployment"
+      spec:
+        template:
+            metadata:
+                labels:
+                    app : "${NAME}"
+            spec:
+                containers:
+                    - name : "${NAME}"
+                      image: "image-registry.openshift-image-registry.svc:5000/utopios-dev/${NAME}-image"
+                      imagePullPolicy: "IfNotPresent"
+                      ports:
+                        - containerPort: ${CONTAINER_PORT}
+                          protocol: "TCP"
+      replicas: ${REPLICAS}
+      triggers:
+          - type: ConfigChange
+          - type: "ImageChange"
+            imageChangeParams:
+                automatic: true
+                containerNames:
+                    - "${NAME}"
+                from:
+                    kind: "ImageStreamTag"
+                    name: "${NAME}-image:latest"
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: result
+      spec:
+        type: NodePort
+      selector:
+        app: result
+      ports:
+        - port: ${CONTAINER_PORT}
+          targetPort: ${CONTAINER_PORT}
+          nodePort: ${NODE_PORT}
+parameters:
+    - name: NAME
+      displayName: "Nom de l'image, container, build et deployment"
+      required: true
+    - name: URI_REPOS
+      displayName: "l'adresse du repos git"
+      required: true
+    - name: REPOS_DIR
+      displayName: "le dossier git"
+      required: true
+    - name: CONTAINER_PORT
+      displayName: "le port du conteneur"
+      required: true
+    - name: NODE_PORT
+      displayName: "le port exterieur"
+      required: true
+    - name: REPLICAS
+      displayName: "le nombre de pod"
+      value: 1
+    
