@@ -2,3 +2,6 @@ En utlisant le projet vote:
 1 - Créer des images stream pour chaque partie du projet
 2-  Créer des buildConfig pour chaque partie du projet
 3-  Créer des deploymentConfig pour chaque partie du projet
+4-  Création de services pour communiquer entre les deployments et avec l'exeterieur
+    2 Service NodePort
+    2 Service clusterIP
