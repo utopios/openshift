@@ -1,0 +1,20 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+    name: result-build
+    labels:
+        build: result-build
+spec:
+    source:
+        type: Git
+        git:
+            uri: 'https://github.com/ihabAbadi/TP'
+        contextDir: result
+    strategy:
+        type: Docker
+        dockerStrategy:
+            dockerfilePath: Dockerfile
+    output:
+        to:
+            kind: ImageStreamTag
+            name: result-image:latest

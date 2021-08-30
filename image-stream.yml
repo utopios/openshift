@@ -1,0 +1,4 @@
+apiVersion: image.opnshift.io/v1
+kind: ImageStreamTag
+metadata:
+    name: result-image:latest
