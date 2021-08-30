@@ -19,7 +19,8 @@ spec:
             kind: ImageStreamTag
             name: result-image:latest
     triggers:
-        # - type: "GitHub"
+        # - type: "GitHub", "gitlab", "bitbucket", "git"
+        #Si le type est git alors il faut ajouter un fichier .gitconfig qui doit fournir les informations de connexion au serveur git (certificat ssl, ssh key...)
         # github:
         #     secretReference:
         #         name: "mysecret"

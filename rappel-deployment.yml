@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: "result-deployment"
+spec:
+    selector:
+        matchLabels:
+            app: "result"
+    template:
+        metadata:
+            labels:
+                app : "result"
+        spec:
+            containers:
+                - name : "result"
+                  image: "image-registry.openshift-image-registry.svc:5000/utopios-dev/result-image"
+                  imagePullPolicy: "IfNotPresent"
+                  ports:
+                    - containerPort: 4000
+                      protocol: "TCP"
+    replicas: 3
