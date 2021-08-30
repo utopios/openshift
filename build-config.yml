@@ -14,6 +14,7 @@ spec:
         type: Docker
         dockerStrategy:
             dockerfilePath: Dockerfile
+        pullSecret: "dockersecret"
     output:
         to:
             kind: ImageStreamTag
